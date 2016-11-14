@@ -3,6 +3,8 @@ import Inferno from 'inferno';
 import InfernoDOM from 'inferno-dom';
 import InfernoServer from 'inferno-server';
 
+import context from './context';
+
 const id = 'app';
 
 export async function initial(Component, ctx) {
@@ -11,12 +13,12 @@ export async function initial(Component, ctx) {
 }
 
 export async function mount(Component, ctx) {
-  const props = await initial(Component);
+  const props = await initial(Component, await context());
   InfernoDOM.render(<Component { ...props } />, document.getElementById(id));
 }
 
 export async function print(Component, ctx) {
-  const props = await initial(Component);
+  const props = await initial(Component, ctx);
   return `<!doctype html>
 <html>
   <head>
@@ -33,5 +35,5 @@ export default async function render(Component, ctx) {
   if (__NODESERVER__) {
     return print(Component, ctx);
   }
-  return mount(Component, ctx);
+  return mount(Component);
 }

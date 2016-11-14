@@ -6,9 +6,9 @@ import styles from './styles.css';
 
 export default class Index extends Component {
 
-  static async getInitialProps (req) {
+  static async getInitialProps ({ location }) {
     return {
-      message: 'hello world',
+      message: `path: ${location.href}`,
     };
   }
 
