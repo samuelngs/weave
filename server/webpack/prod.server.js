@@ -40,7 +40,8 @@ module.exports = {
         }
       },
       { test: /\.css$/, loader: 'css-loader/locals?minimize&module&importLoaders=1!postcss-loader' },
-    ]
+    ],
+    noParse: [new RegExp('node_modules/localforage/dist/localforage.js')],
   },
   externals: modules,
   resolve: {

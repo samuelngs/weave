@@ -8,11 +8,6 @@ import context from 'weave-context';
 
 const id = 'app';
 
-export async function initial(Component, ctx) {
-  if (!Component) return null;
-  return await (typeof Component.getInitialProps === 'function' ? Component.getInitialProps(ctx) : {});
-}
-
 export async function mount(ctx) {
   const state = await context();
   const root = await router(state);

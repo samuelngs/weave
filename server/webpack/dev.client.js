@@ -44,7 +44,8 @@ module.exports = {
         }
       },
       { test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css-loader?module&importLoaders=1!postcss-loader') },
-    ]
+    ],
+    noParse: [new RegExp('node_modules/localforage/dist/localforage.js')],
   },
   resolve: {
     root: [path.join(__dirname, '..')],
