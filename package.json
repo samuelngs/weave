@@ -4,7 +4,8 @@
   "description": "A framework for building universal inferno applications",
   "main": "index.js",
   "scripts": {
-    "start": "rm -rf build && webpack --watch --config server/webpack/dev.js --display-error-details --progress --no-info"
+    "start": "rm -rf build && webpack --display-error-details --progress --no-info --watch --config server/webpack/dev.js",
+    "build": "rm -rf build && webpack --progress --display-error-details --config server/webpack/prod.js"
   },
   "repository": {
     "type": "git",
@@ -27,9 +28,9 @@
     "redux": "^3.6.0",
     "isomorphic-fetch": "^2.2.1",
     "express": "^4.14.0",
+    "compression": "^1.6.2",
     "cookie-parser": "^1.4.3",
-    "ua-parser-js": "0.7.12",
-    "route-parser": "0.0.5"
+    "ua-parser-js": "0.7.12"
   },
   "devDependencies": {
     "babel-core": "^6.18.2",
