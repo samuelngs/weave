@@ -66,6 +66,9 @@ module.exports = {
       __NODECLIENT__: true,
       __PRODUCTION__: false,
     }),
+    new webpack.ProvidePlugin({
+      Inferno: 'inferno',
+    }),
     new ExtractTextPlugin('styles.css'),
   ],
   postcss: [],

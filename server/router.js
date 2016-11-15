@@ -1,7 +1,6 @@
 
 import Inferno from 'inferno';
 import App from 'weave-app';
-import Uri from 'route-parser';
 
 import {
   Route as InfernoRoute,

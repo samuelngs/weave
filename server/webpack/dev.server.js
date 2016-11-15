@@ -88,6 +88,9 @@ module.exports = {
       __NODECLIENT__: false,
       __PRODUCTION__: false,
     }),
+    new webpack.ProvidePlugin({
+      Inferno: 'inferno',
+    }),
     new StartServerPlugin('server.js'),
   ],
   node: {

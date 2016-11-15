@@ -1,5 +1,4 @@
 
-var path = require('path');
 var webpack = require('webpack');
 
 var server = require('./dev.server.js');
