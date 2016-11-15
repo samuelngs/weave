@@ -1,6 +1,4 @@
 
-import Inferno from 'inferno';
-
 import Component from 'weave-component';
 import { Router, Route } from 'weave-router';
 
