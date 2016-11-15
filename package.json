@@ -28,7 +28,8 @@
     "isomorphic-fetch": "^2.2.1",
     "express": "^4.14.0",
     "cookie-parser": "^1.4.3",
-    "ua-parser-js": "0.7.12"
+    "ua-parser-js": "0.7.12",
+    "route-parser": "0.0.5"
   },
   "devDependencies": {
     "babel-core": "^6.18.2",

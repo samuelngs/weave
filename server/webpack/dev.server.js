@@ -47,6 +47,14 @@ module.exports = {
   externals: modules,
   resolve: {
     root: [path.join(__dirname, '..')],
+    alias: {
+      'weave': 'inferno',
+      'weave-component': 'inferno-component',
+      'weave-router': path.join(__dirname, '..', 'router.js'),
+      'weave-render': path.join(__dirname, '..', 'render.js'),
+      'weave-context': path.join(__dirname, '..', 'context.js'),
+      'weave-app': path.join(__dirname, '..', '..', 'app'),
+    },
     extensions: ['', '.js', '.jsx', '.css'],
   },
   devServer: {

@@ -1,9 +1,9 @@
 
 import Inferno from 'inferno';
-import Application from '../app';
 
-import render from './render';
+import router from 'weave-router';
+import render from 'weave-render';
 
 if (typeof window !== 'undefined') {
-  window.addEventListener('load', () => render(Application));
+  window.addEventListener('load', render);
 }

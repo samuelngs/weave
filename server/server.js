@@ -6,12 +6,12 @@ import cookies from 'cookie-parser';
 import render from './render';
 import context from './context';
 
-import Application from '../app';
-
 const app = express();
 const port = 5000;
 
 app.use(cookies());
+
+app.use('/favicon.ico', (req, res) => res.status(404).end());
 
 app.use('/ctx', (req, res) => res.json(req.headers));
 
@@ -21,7 +21,7 @@ app.use('/*', async (req, res) => {
   return res.
     status(200).
     send(
-      await render(Application, await context(req, res)),
+      await render(await context(req, res)),
     );
 });
 

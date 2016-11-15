@@ -70,7 +70,7 @@ export async function server(req, res) {
       hostname: req.hostname || types.string,
       href: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
       origin: req.get('origin') || types.string,
-      pathname: req.path || types.string,
+      pathname: req.originalUrl || types.string,
       port: req.socket.localPort,
       protocol: `${req.protocol}:`,
       reload: () => res.location(req.path),
