@@ -13,7 +13,7 @@ const defaults = {
   string: '',
   object: {},
   array : [],
-  routes: [<InfernoRoute path={"/*"} component={RoutesNotFound} />],
+  routes: [<InfernoRoute path={"*"} component={RoutesNotFound} />],
 };
 
 const config = {
