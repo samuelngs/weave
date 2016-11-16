@@ -22,7 +22,7 @@ const config = {
 if (__NODECLIENT__) config.storage = require('localforage');
 
 function RoutesNotFound() {
-  return <div>Not routes are found</div>
+  return <div>No matching route found</div>
 }
 
 export async function redux(reducers) {
