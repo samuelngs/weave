@@ -8,7 +8,7 @@ A framework for building universal inferno applications
 * Universal rendering (Server-side and Browser)
 * Redux predictable state
 * Redux persistent storage
-* Asynchronous data fetching [`static async getInitialProps (ctx)`]
+* Initial props when page loads `static async getInitialProps ({ navigator, location, document, cookies, headers })`
 * Support [Redux-Devtools Chrome Extension](https://github.com/zalmoxisus/redux-devtools-extension)
 * CSS Modules
 * Live reload
