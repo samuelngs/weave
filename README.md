@@ -51,6 +51,10 @@ export default () => <Router>
 
 ```
 import styles from './styles.css'
+
+const view = () => <div className={styles.something}>
+  ...
+</div>
 ```
 
 #### Props initialization
