@@ -39,7 +39,7 @@ import { Router, Route } from 'weave-router';
 
 const Weave = (props) => <div>Welcome to Weave!</div>
 
-export default() => <Router>
+export default () => <Router>
   <Route path={"/"} component={Weave} />
   <Route path={"*"} component={Weave} />
 </Router>
