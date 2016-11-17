@@ -5,6 +5,7 @@
   "main": "./build/index.js",
   "scripts": {
     "build": "babel core --out-dir build",
+    "postinstall": "npm run build",
     "prepublish": "npm run build"
   },
   "bin": {
