@@ -52,7 +52,7 @@ export default (dir, tmp) => ({
                   'weave-router': path.join(__dirname, '..', 'router.js'),
                   'weave-render': path.join(__dirname, '..', 'render.js'),
                   'weave-context': path.join(__dirname, '..', 'context.js'),
-                  'application': dir,
+                  'application': path.join(dir, 'index.js'),
                 },
               },
             ],
@@ -82,8 +82,11 @@ export default (dir, tmp) => ({
   },
   resolve: {
     root: [
-      path.join(__dirname, '..'),
+      dir,
     ],
+    alias: {
+      application: dir,
+    },
     extensions: ['', '.js', '.jsx', '.css'],
   },
   plugins: [

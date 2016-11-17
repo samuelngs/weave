@@ -20,10 +20,9 @@ export default (dir) => ({
   name: 'client',
   target: 'web',
   context: path.join(__dirname, '..'),
-  entry: {
-    client: './client.js',
-    application: dir,
-  },
+  entry: [
+    './client.js',
+  ],
   devtool: 'cheap-module-source-map',
   output: {
     path: path.resolve(dir, 'dist'),
@@ -78,9 +77,6 @@ export default (dir) => ({
       { test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css-loader?minimize&module&importLoaders=1!postcss-loader') },
     ],
     noParse: [new RegExp('node_modules/localforage/dist/localforage.js')],
-  },
-  externals: {
-    [dir]: 'commonjs application',
   },
   resolve: {
     root: [

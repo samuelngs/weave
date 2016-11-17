@@ -39,6 +39,7 @@ export default (dir, tmp) => {
     if (err) throw err;
     const { app, port } = express(require(`${tmp}/script`).default, tmp);
     app.listen(port, () => {
+      console.log(tmp);
       console.log('Server running on port ' + port);
     });
     new WebpackDevServer(compiler, {
