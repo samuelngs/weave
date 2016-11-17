@@ -1,19 +1,32 @@
 
-var path = require('path');
-var webpack = require('webpack');
+import path from 'path';
+import webpack from 'webpack';
 
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 
-module.exports = {
+const alias = { };
+[
+  'babel-runtime',
+  'inferno',
+  'inferno-component',
+  'regenerator-runtime',
+].forEach( n => {
+  alias[n] = require.
+    resolve(`${n}/package`).
+    replace(/[\\\/]package\.json$/, '')
+});
+
+export default (dir) => ({
   name: 'client',
   target: 'web',
   context: path.join(__dirname, '..'),
-  entry: [
-    './client.js',
-  ],
+  entry: {
+    client: './client.js',
+    application: dir,
+  },
   devtool: 'cheap-module-source-map',
   output: {
-    path: path.resolve(__dirname, '..', '..', 'build'),
+    path: path.resolve(dir, 'dist'),
     filename: 'client.js',
     publicPath: 'assets/',
   },
@@ -24,13 +37,34 @@ module.exports = {
         loader: 'babel-loader',
         query: {
           presets: ['es2015', 'stage-0'],
-          plugins: ['inferno', 'transform-async-to-generator', 'transform-object-rest-spread', 'transform-class-properties', 'transform-runtime']
+          plugins: [
+            require.resolve('babel-plugin-inferno'),
+            require.resolve('babel-plugin-transform-async-to-generator'),
+            require.resolve('babel-plugin-transform-object-rest-spread'),
+            require.resolve('babel-plugin-transform-class-properties'),
+            require.resolve('babel-plugin-transform-runtime'),
+            [
+              require.resolve('babel-plugin-module-resolver'),
+              {
+                alias: {
+                  ...alias,
+                  'weave-router': path.join(__dirname, '..', 'router.js'),
+                  'weave-render': path.join(__dirname, '..', 'render.js'),
+                  'weave-context': path.join(__dirname, '..', 'context.js'),
+                  'application': path.join(dir, 'index.js'),
+                },
+              },
+            ],
+          ]
         },
         include: [
           path.join(__dirname, '..'),
-          path.join(__dirname, '..', '..', 'app'),
+          dir,
         ],
-        exclude: path.join(__dirname, '..', '..', 'node_modules')
+        exclude: [
+          path.join(__dirname, '..', '..', 'node_modules'),
+          path.join(dir, 'node_modules'),
+        ],
       },
       { test: /\.json$/, loader: 'json-loader' },
       {
@@ -45,15 +79,15 @@ module.exports = {
     ],
     noParse: [new RegExp('node_modules/localforage/dist/localforage.js')],
   },
+  externals: {
+    [dir]: 'commonjs application',
+  },
   resolve: {
-    root: [path.join(__dirname, '..')],
+    root: [
+      dir,
+    ],
     alias: {
-      'weave': 'inferno',
-      'weave-component': 'inferno-component',
-      'weave-router': path.join(__dirname, '..', 'router.js'),
-      'weave-render': path.join(__dirname, '..', 'render.js'),
-      'weave-context': path.join(__dirname, '..', 'context.js'),
-      'weave-app': path.join(__dirname, '..', '..', 'app'),
+      application: dir,
     },
     extensions: ['', '.js', '.jsx', '.css'],
   },
@@ -65,18 +99,10 @@ module.exports = {
       output: { comments: false },
     }),
     new webpack.DefinePlugin({
-      __NODESERVER__: false,
-      __NODECLIENT__: true,
-      __PRODUCTION__: true,
-      'process.env': {
-        'NODE_ENV': JSON.stringify('production'),
-      },
-    }),
-    new webpack.ProvidePlugin({
-      Inferno: 'inferno',
+      'process.env.NODE_ENV': JSON.stringify('production'),
     }),
     new ExtractTextPlugin('styles.css'),
   ],
   postcss: [],
-};
+});
 

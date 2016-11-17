@@ -14,7 +14,7 @@ const alias = { };
     replace(/[\\\/]package\.json$/, '')
 });
 
-module.exports = (dir, tmp) => ({
+export default (dir, tmp) => ({
   name: 'script',
   target: 'node',
   cache:   false,

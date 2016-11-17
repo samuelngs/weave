@@ -4,8 +4,6 @@ import path from 'path';
 import temp from 'temporary';
 import compiler from './build/dev';
 
-import webpack from 'webpack';
-
 const arg = process.argv.slice(2);
 const tmp = new temp.Dir();
 

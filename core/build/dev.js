@@ -31,7 +31,7 @@ const config = {
   }
 };
 
-module.exports = (dir, tmp) => {
+export default (dir, tmp) => {
   const compiler = webpack([
     server(dir, tmp),
     client(dir, tmp),
