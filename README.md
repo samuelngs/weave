@@ -14,14 +14,89 @@ A framework for building universal inferno applications
 * Live reload
 
 ## Installation
+
+Install weave-io library
 ```
-$ git clone https://github.com/samuelngs/weave
-$ cd weave && npm install
+$ npm install weave-io --save
+```
+
+Add script to your package.json
+```
+{
+  "scripts": {
+    "dev": "weave"
+  }
+}
+```
+
+Create `index.js` file
+
+```
+import Inferno from 'inferno';
+import Component from 'inferno-component';
+
+import { Router, Route } from 'weave-router';
+
+function Weave(props) {
+  return <div>Welcome to Weave!</div>
+}
+
+export default function () {
+  return <Router>
+    <Route path={"/"} component={Weave} />
+    <Route path={"*"} component={Weave} />
+  </Router>
+}
+```
+## Usage
+
+#### CSS
+
+```
+import styles from './styles.css'
+```
+
+#### Props initialization
+```
+import Inferno from 'inferno';
+import Component from 'inferno-component';
+
+export default class Path extends Component {
+
+  static async getInitialProps ({ location }) {
+    return { pathname: location.pathname };
+  }
+
+  render() {
+    return <div>Path: { this.props.pathname }</div>
+  }
+}
+```
+
+
+#### Redux
+```
+function counter(state = 0, action) {
+  switch (action.type) {
+  case 'INCREMENT':
+    return state + 1
+  ...
+}
+
+const reducers = {
+	counter,
+};
+
+export default function () {
+  return <Router reducers={ reducers }>
+  	...
+  </Router>
+}
 ```
 
 ## Development
 ```
-$ npm start
+$ npm run dev
 ```
 
 ## Bundling
