@@ -1,3 +1,13 @@
 #!/usr/bin/env node
 
-require('../dist/cli.js');
+var arg = process.argv.slice(2);
+
+switch ( arg[0] ) {
+  case 'build':
+    require('../dist/compile');
+    break;
+  default:
+    require('../dist/cli');
+    break;
+}
+
