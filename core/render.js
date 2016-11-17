@@ -3,19 +3,19 @@ import Inferno from 'inferno';
 import InfernoDOM from 'inferno-dom';
 import InfernoServer from 'inferno-server';
 
-import router from 'weave-router';
-import context from 'weave-context';
+import router from './router';
+import context from './context';
 
 const id = 'app';
 
-export async function mount(ctx) {
+export async function mount(App, ctx) {
   const state = await context();
-  const root = await router(state);
+  const root = await router(App, state);
   InfernoDOM.render(root, document.getElementById(id));
 }
 
-export async function print(ctx) {
-  const root = await router(ctx);
+export async function print(App, ctx) {
+  const root = await router(App, ctx);
   return `<!doctype html>
 <html>
   <head>
@@ -28,9 +28,9 @@ export async function print(ctx) {
 </html>`;
 }
 
-export default async function render(ctx) {
-  if (__NODESERVER__) {
-    return print(ctx);
+export default async function render(App, ctx) {
+  if (typeof window === 'undefined') {
+    return print(App, ctx);
   }
-  return mount();
+  return mount(App);
 }

@@ -107,7 +107,7 @@ export async function client() {
 }
 
 export default async function context(...args) {
-  if (__NODESERVER__) {
+  if (typeof window === 'undefined') {
     return server(...args);
   }
   return client(...args);

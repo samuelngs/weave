@@ -1,6 +1,5 @@
 
 import Inferno from 'inferno';
-import App from 'weave-app';
 
 import { Route as InfernoRoute, Router as InfernoRouter, browserHistory } from 'inferno-router';
 import { Provider } from 'inferno-redux';
@@ -19,7 +18,7 @@ const defaults = {
 const config = {
   keyPrefix: 'weave:',
 }
-if (__NODECLIENT__) config.storage = require('localforage');
+if (typeof window !== 'undefined') config.storage = require('localforage');
 
 function RoutesNotFound() {
   return <div>No matching route found</div>
@@ -30,7 +29,7 @@ export async function redux(reducers) {
   const loaders = [ autoRehydrate() ];
   if (typeof window !== 'undefined') loaders.push(window.devToolsExtension ? window.devToolsExtension() : f => f);
   const store = compose(...loaders)(createStore)(reducer);
-  if (__NODECLIENT__) persistStore(store, config);
+  if (typeof window !== 'undefined') persistStore(store, config);
   await getStoredState(config);
   return store;
 }
@@ -65,7 +64,7 @@ export function Route(props, context) {
   return <InfernoRoute { ...props } context={context} />
 }
 
-export default async function(ctx) {
+export default async function(App, ctx) {
   const { location } = ctx;
   const root = new App(ctx);
   const store = await redux(root.attrs && root.attrs.reducers);
