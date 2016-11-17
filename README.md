@@ -38,16 +38,12 @@ import Component from 'inferno-component';
 
 import { Router, Route } from 'weave-router';
 
-function Weave(props) {
-  return <div>Welcome to Weave!</div>
-}
+const Weave = (props) => <div>Welcome to Weave!</div>
 
-export default function () {
-  return <Router>
-    <Route path={"/"} component={Weave} />
-    <Route path={"*"} component={Weave} />
-  </Router>
-}
+export default () => <Router>
+  <Route path={"/"} component={Weave} />
+  <Route path={"*"} component={Weave} />
+</Router>
 ```
 ## Usage
 
@@ -84,15 +80,11 @@ function counter(state = 0, action) {
   ...
 }
 
-const reducers = {
-	counter,
-};
+const reducers = { counter };
 
-export default function () {
-  return <Router reducers={ reducers }>
-  	...
-  </Router>
-}
+export default () => <Router reducers={ reducers }>
+  ...
+</Router>
 ```
 
 ## Development
