@@ -24,7 +24,8 @@ Add script to your package.json
 ```
 {
   "scripts": {
-    "dev": "weave"
+    "dev": "weave",
+    "build": "weave build"
   }
 }
 ```
