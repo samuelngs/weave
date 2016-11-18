@@ -87,6 +87,9 @@ export default (dir) => ({
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
+    new webpack.ProvidePlugin({
+      fetch: 'isomorphic-fetch',
+    }),
     new webpack.DefinePlugin({
       $dirname: '__dirname',
     }),

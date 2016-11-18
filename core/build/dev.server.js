@@ -82,6 +82,9 @@ export default (dir, tmp) => ({
   plugins: [
     new webpack.HotModuleReplacementPlugin({ multiStep: true }),
     new webpack.NoErrorsPlugin(),
+    new webpack.ProvidePlugin({
+      fetch: 'isomorphic-fetch',
+    }),
   ],
   node: {
     __filename: true,

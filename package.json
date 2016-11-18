@@ -1,6 +1,6 @@
 {
   "name": "weave-io",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "A framework for building universal inferno applications",
   "main": "./build/index.js",
   "scripts": {
@@ -30,6 +30,7 @@
     "inferno-redux": "^0.7.27",
     "redux": "^3.6.0",
     "redux-persist": "4.0.0-alpha7",
+    "redux-thunk": "^2.1.0",
     "localforage": "^1.4.3",
     "isomorphic-fetch": "^2.2.1",
     "express": "^4.14.0",

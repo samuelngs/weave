@@ -5,6 +5,7 @@ import { Route as InfernoRoute, Router as InfernoRouter, browserHistory } from '
 import { Provider } from 'inferno-redux';
 import { compose, createStore, combineReducers, applyMiddleware } from 'redux';
 import { persistStore, autoRehydrate, getStoredState } from 'redux-persist';
+import thunk from 'redux-thunk';
 
 import { exec } from './utils';
 
@@ -26,7 +27,10 @@ function RoutesNotFound() {
 
 export async function redux(reducers) {
   const reducer = combineReducers(typeof reducers === 'object' && reducers != null ? reducers : defaults.object);
-  const loaders = [ autoRehydrate() ];
+  const loaders = [
+    autoRehydrate(),
+    applyMiddleware(thunk),
+  ];
   if (typeof window !== 'undefined') loaders.push(window.devToolsExtension ? window.devToolsExtension() : f => f);
   const store = compose(...loaders)(createStore)(reducer);
   if (typeof window !== 'undefined') persistStore(store, config);
@@ -35,10 +39,10 @@ export async function redux(reducers) {
 }
 
 async function routes(routes = defaults.routes, ctx) {
-  const res = [];
-  await routes.map(async ({ attrs: { path, component } }, index) => {
-    res.push(<InfernoRoute key={index} path={path} component={await render(component, path, ctx)} />)
-  })
+  const res = await Promise.all(routes.map(async ({ attrs: { path, component } }, index) => {
+    const view = await patch(component, path, ctx)
+    return <InfernoRoute key={index} path={path} component={view} />
+  }))
   return res;
 }
 
@@ -49,7 +53,7 @@ async function initial(Component, path, ctx) {
   return await (typeof Component.getInitialProps === 'function' ? Component.getInitialProps(ctx) : defaults.object);
 }
 
-async function render(Component, path, ctx) {
+async function patch(Component, path, ctx) {
   const props = await initial(Component, path, ctx);
   return function() {
     return <Component { ...props } { ...ctx } />
