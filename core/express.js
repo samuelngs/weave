@@ -1,4 +1,5 @@
 
+import path from 'path';
 import express from 'express';
 import cookies from 'cookie-parser';
 import compression from 'compression';
@@ -17,7 +18,10 @@ export default function server(App, dir = process.cwd()) {
   app.use(cookies());
 
   app.use('/favicon.ico', (req, res) => res.status(404).end());
+
   app.use('/ctx', (req, res) => res.json(req.headers));
+
+  app.use('/sw.js', (req, res) => res.sendFile(path.join(dir, 'sw.js')));
 
   if (process.env.NODE_ENV !== 'production') {
     app.use('/assets', proxy(url.parse('http://127.0.0.1:5001/assets')));

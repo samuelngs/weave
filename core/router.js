@@ -7,6 +7,7 @@ import { compose, createStore, combineReducers, applyMiddleware } from 'redux';
 import { persistStore, autoRehydrate, getStoredState } from 'redux-persist';
 import thunk from 'redux-thunk';
 
+import offline from './offline';
 import { exec } from './utils';
 
 const defaults = {
@@ -20,6 +21,8 @@ const config = {
   keyPrefix: 'weave:',
 }
 if (typeof window !== 'undefined') config.storage = require('localforage');
+
+offline();
 
 function RoutesNotFound() {
   return <div>No matching route found</div>
