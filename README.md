@@ -6,6 +6,7 @@ A framework for building universal inferno applications
 * Inferno
 * Express 4
 * Universal rendering (Server-side and Browser)
+* Offline-first
 * Redux predictable state
 * Redux persistent storage with `localforage`
 * Redux Thunk support
@@ -16,7 +17,6 @@ A framework for building universal inferno applications
 
 ## TODO
 
-- [ ] Offline-first
 - [ ] Head component
 - [ ] Hot code reloading
 
