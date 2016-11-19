@@ -66,6 +66,16 @@ export default (dir) => ({
           path.join(dir, 'node_modules'),
         ],
       },
+      { test: /\.json$/, loader: 'json-loader' },
+      {
+        test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
+        loader: 'file',
+        query: {
+          name: 'assets/[hash].[ext]',
+          publicPath: '/',
+          limit: 10000,
+        }
+      },
       { test: /\.css$/, loader: 'css-loader/locals?minimize&module&importLoaders=1!postcss-loader' },
     ],
     noParse: [new RegExp('node_modules/localforage/dist/localforage.js')],

@@ -3,6 +3,7 @@ import path from 'path';
 import webpack from 'webpack';
 
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import OfflinePlugin from 'offline-plugin';
 
 const alias = { };
 [
@@ -28,7 +29,7 @@ export default (dir, tmp) => ({
   devtool: 'eval',
   output: {
     path: tmp,
-    filename: './assets/client.js',
+    filename: 'assets/client.js',
     publicPath: 'assets/',
   },
   module: {
@@ -96,6 +97,29 @@ export default (dir, tmp) => ({
       fetch: 'isomorphic-fetch',
     }),
     new ExtractTextPlugin('assets/styles.css'),
+    new OfflinePlugin({
+      publicPath: '/',
+      relativePaths: false,
+      updateStrategy: 'all',
+      version: '[hash]',
+      caches: {
+        main: [
+          '/',
+          '/ctx',
+          ':rest:',
+        ],
+      },
+      externals: [
+        '/',
+        '/ctx',
+      ],
+      ServiceWorker: {
+        output: 'sw.js'
+      },
+      AppCache: {
+        directory: 'appcache/',
+      },
+    }),
   ],
   postcss: [],
 });

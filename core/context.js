@@ -1,7 +1,7 @@
 
 import uaparser from 'ua-parser-js';
 
-const types = {
+const defaults = {
   string: '',
   object: {},
   array : [],
@@ -10,7 +10,7 @@ const types = {
   func  : () => {},
 };
 
-async function languages(header = types.string) {
+async function languages(header = defaults.string) {
   const res = [];
   const opt = header.split(',');
   for (const i of opt) {
@@ -20,17 +20,17 @@ async function languages(header = types.string) {
 }
 
 async function cookies() {
-  const cookies = (document.cookie || types.string).split(', ');
+  const cookies = (document.cookie || defaults.string).split(', ');
   const res = { };
   for (let i = 0; i < cookies.length; i++) {
     const cur = cookies[i].split('=');
-    res[cur[0]] = cur[1] || types.string;
+    res[cur[0]] = cur[1] || defaults.string;
   }
   return res;
 }
 
 async function headers() {
-  return fetch('/ctx').then(res => res.json()).catch(_ => types.object);
+  return fetch('/ctx').then(res => res.json()).catch(_ => defaults.object);
 }
 
 export async function server(req, res) {
@@ -42,35 +42,35 @@ export async function server(req, res) {
       appName: ua.browser.name,
       appVersion: ua.browser.version,
       cookieEnabled: typeof req.cookies === 'object' && req.cookies !== null,
-      credentials: types.object,
+      credentials: defaults.object,
       doNotTrack: req.headers['dnt'],
-      geolocation: types.object,
-      hardwareConcurrency: types.number,
+      geolocation: defaults.object,
+      hardwareConcurrency: defaults.number,
       language: lang[0],
       languages: lang,
-      maxTouchPoints: types.number,
-      mediaDevices: types.object,
-      mimeTypes: types.array,
+      maxTouchPoints: defaults.number,
+      mediaDevices: defaults.object,
+      mimeTypes: defaults.array,
       onLine: true,
-      permissions: types.array,
+      permissions: defaults.array,
       platform: `${ua.os.name} ${ua.os.version}`,
-      plugins: types.array,
-      presentation: types.object,
-      product: types.string,
-      productSub: types.string,
+      plugins: defaults.array,
+      presentation: defaults.object,
+      product: defaults.string,
+      productSub: defaults.string,
       userAgent: ua.ua,
-      vendor: types.string,
-      vendorSub: types.string,
+      vendor: defaults.string,
+      vendorSub: defaults.string,
     },
     location: {
-      ancestorOrigins: types.array,
+      ancestorOrigins: defaults.array,
       assign: (path) => res.location(path),
-      hash: types.string,
+      hash: defaults.string,
       host: `${req.hostname}:${req.socket.localPort}`,
-      hostname: req.hostname || types.string,
+      hostname: req.hostname || defaults.string,
       href: `${req.protocol}://${req.get('host')}${req.originalUrl}`,
-      origin: req.get('origin') || types.string,
-      pathname: req.originalUrl || types.string,
+      origin: req.get('origin') || defaults.string,
+      pathname: req.originalUrl || defaults.string,
       port: req.socket.localPort,
       protocol: `${req.protocol}:`,
       reload: () => res.location(req.path),
@@ -78,14 +78,14 @@ export async function server(req, res) {
       search: '',
     },
     document: {
-      cookie: req.headers.cookie || types.string,
+      cookie: req.headers.cookie || defaults.string,
     },
     cookies: {
       ...req.cookies,
       ...req.signedCookies,
     },
     headers: {
-      cookie: req.headers.cookie || types.string,
+      cookie: req.headers.cookie || defaults.string,
       ...req.headers,
     },
   };
@@ -96,11 +96,11 @@ export async function client() {
     navigator,
     location,
     document: {
-      cookie: document.cookie || object.string,
+      cookie: document.cookie || defaults.string,
     },
     cookies: await cookies(),
     headers: {
-      cookie: document.cookie || object.string,
+      cookie: document.cookie || defaults.string,
       ...await headers(),
     },
   };

@@ -6,7 +6,6 @@ import express from '../express';
 
 import client from './dev.client.js';
 import server from './dev.server.js';
-import offline from './dev.offline.js';
 
 const config = {
   hot: false,
@@ -36,7 +35,6 @@ export default (dir, tmp) => {
   const compiler = webpack([
     server(dir, tmp),
     client(dir, tmp),
-    offline(dir, tmp),
   ], function(err, res) {
     if (err) throw err;
     const { app, port } = express(require(`${tmp}/script`).default, tmp);

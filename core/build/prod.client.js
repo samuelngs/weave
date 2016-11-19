@@ -3,6 +3,7 @@ import path from 'path';
 import webpack from 'webpack';
 
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import OfflinePlugin from 'offline-plugin';
 
 const alias = { };
 [
@@ -26,7 +27,7 @@ export default (dir) => ({
   devtool: 'cheap-module-source-map',
   output: {
     path: path.resolve(dir, 'dist'),
-    filename: 'client.js',
+    filename: 'assets/client.js',
     publicPath: 'assets/',
   },
   module: {
@@ -68,9 +69,10 @@ export default (dir) => ({
       { test: /\.json$/, loader: 'json-loader' },
       {
         test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
-        loader: 'url',
+        loader: 'file',
         query: {
-          name: '[hash].[ext]',
+          name: 'assets/[hash].[ext]',
+          publicPath: '/',
           limit: 10000,
         }
       },
@@ -100,7 +102,30 @@ export default (dir) => ({
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
-    new ExtractTextPlugin('styles.css'),
+    new ExtractTextPlugin('assets/styles.css'),
+    new OfflinePlugin({
+      publicPath: '/',
+      relativePaths: false,
+      updateStrategy: 'all',
+      version: '[hash]',
+      caches: {
+        main: [
+          '/',
+          '/ctx',
+          ':rest:',
+        ],
+      },
+      externals: [
+        '/',
+        '/ctx',
+      ],
+      ServiceWorker: {
+        output: 'sw.js'
+      },
+      AppCache: {
+        directory: 'appcache/',
+      },
+    }),
   ],
   postcss: [],
 });

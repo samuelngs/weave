@@ -21,8 +21,7 @@ const config = {
   keyPrefix: 'weave:',
 }
 if (typeof window !== 'undefined') config.storage = require('localforage');
-
-offline();
+if (typeof window !== 'undefined') offline();
 
 function RoutesNotFound() {
   return <div>No matching route found</div>

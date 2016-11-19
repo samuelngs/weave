@@ -21,12 +21,13 @@ export default function server(App, dir = process.cwd()) {
 
   app.use('/ctx', (req, res) => res.json(req.headers));
 
-  app.use('/sw.js', (req, res) => res.sendFile(path.join(dir, 'sw.js')));
 
   if (process.env.NODE_ENV !== 'production') {
+    app.use('/sw.js', express.static(path.join(dir, 'sw.js')));
     app.use('/assets', proxy(url.parse('http://127.0.0.1:5001/assets')));
   } else {
-    app.use('/assets', express.static(dir));
+    app.use('/sw.js', (req, res) => res.sendFile(path.join(dir, 'sw.js')));
+    app.use('/assets', express.static(path.join(dir, 'assets')));
   }
 
   app.use('/*', async (req, res) => {
