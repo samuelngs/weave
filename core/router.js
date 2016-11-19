@@ -7,6 +7,8 @@ import { compose, createStore, combineReducers, applyMiddleware } from 'redux';
 import { persistStore, autoRehydrate, getStoredState } from 'redux-persist';
 import thunk from 'redux-thunk';
 
+import NotFound from './components/404';
+
 import offline from './offline';
 import { exec } from './utils';
 
@@ -14,7 +16,7 @@ const defaults = {
   string: '',
   object: {},
   array : [],
-  routes: [<InfernoRoute path={"*"} component={RoutesNotFound} />],
+  routes: [],
 };
 
 const config = {
@@ -22,10 +24,6 @@ const config = {
 }
 if (typeof window !== 'undefined') config.storage = require('localforage');
 if (typeof window !== 'undefined') offline();
-
-function RoutesNotFound() {
-  return <div>No matching route found</div>
-}
 
 export async function redux(reducers) {
   const reducer = combineReducers(typeof reducers === 'object' && reducers != null ? reducers : defaults.object);
@@ -40,11 +38,15 @@ export async function redux(reducers) {
   return store;
 }
 
-async function routes(routes = defaults.routes, ctx) {
+async function routes(routes, ctx) {
+  let wildcard = false;
+  if (!Array.isArray(routes)) routes = defaults.routes;
   const res = await Promise.all(routes.map(async ({ attrs: { path, component } }, index) => {
     const view = await patch(component, path, ctx)
+    if ( !wildcard && path.indexOf('*') > -1 ) wildcard = true;
     return <InfernoRoute key={index} path={path} component={view} />
   }))
+  if (!wildcard) res.push(<InfernoRoute path={"*"} component={NotFound} />);
   return res;
 }
 
