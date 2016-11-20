@@ -20,8 +20,12 @@ async function languages(header = defaults.string) {
 }
 
 async function cookies() {
-  const cookies = (document.cookie || defaults.string).split(', ');
   const res = { };
+  const str = (document.cookie || defaults.string).trim();
+  if (str.length === 0) {
+    return res;
+  }
+  const cookies = str.split(', ');
   for (let i = 0; i < cookies.length; i++) {
     const cur = cookies[i].split('=');
     res[cur[0]] = cur[1] || defaults.string;
