@@ -10,8 +10,6 @@ const defaults = {
   array : [],
 };
 
-const placeholder = <div />;
-
 export default class Wrapper extends Component {
 
   state = {
@@ -36,9 +34,11 @@ export default class Wrapper extends Component {
     let metas = await (typeof view.getMetaTags === 'function' ? view.getMetaTags(props) : defaults.array);
     if (!Array.isArray(metas)) metas = defaults.array;
 
-    this.setState({ initialized: true, props, ctx }, () => {
-      if (document.title !== title) document.title = title;
-    });
+    this.setState({ initialized: true, props, ctx }, () => this.updateHead(title, metas));
+  }
+
+  updateHead(name) {
+    document.title = name;
   }
 
   classes() {

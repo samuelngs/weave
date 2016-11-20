@@ -18,18 +18,13 @@ export async function print(App, ctx) {
   const { app, meta, title } = await router(App, ctx);
   return `<!doctype html>
 <html>
-  <head>
-    <title>${title}</title>
-    ${meta.map(i => {
-      if (typeof i !== 'object' || i === null) return '';
-      return `<meta ${Object.keys(i).map(n => {
-        return `${n}="${i[n]}"`
-      }).join(' ')}>`;
-    }).join('\n    ').trim()}
+  ${InfernoServer.renderToString(<head>
+    <title>{ title }</title>
+    { meta.map(i => <meta { ...i } />) }
     <link media="all" rel="stylesheet" href="/assets/styles.css" />
-  </head>
+  </head>)}
   <body>
-    <div id=${id}>${InfernoServer.renderToString(app)}</div>
+    <div id="${id}">${InfernoServer.renderToString(app)}</div>
     <script type="text/javascript" charset="utf-8" src="/assets/client.js"></script>
   </body>
 </html>`;
