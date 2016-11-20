@@ -1,6 +1,6 @@
 {
   "name": "weave-io",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "A framework for building universal inferno applications",
   "main": "./build/index.js",
   "scripts": {
@@ -16,9 +16,14 @@
   },
   "keywords": [
     "inferno",
-    "universal",
+    "redux",
+    "thunk",
     "framework",
-    "applications"
+    "universal",
+    "isomorphic",
+    "boilerplate",
+    "applications",
+    "offline-first"
   ],
   "dependencies": {
     "inferno": "^0.7.27",
