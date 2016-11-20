@@ -28,11 +28,24 @@ export default class Wrapper extends Component {
     this.setState({ initialized: true, props, ctx });
   }
 
+  classes() {
+    const { view } = this.props;
+    const classes = typeof view.getElementClasses === 'function' ? view.getElementClasses() : defaults.string;
+    if (Array.isArray(classes)) {
+      return classes.join(' ');
+    } else if (typeof classes === 'string') {
+      return classes;
+    }
+    return defaults.string;
+  }
+
   render() {
     const { initialized, props, ctx } = this.state;
     const { view, path } = this.props;
+    const classes = this.classes();
+    const args = classes.length > 0 ? { className: classes } : defaults.object;
     const View = view;
-    return <div>
+    return <div { ...args }>
       { initialized && <View { ...props } { ...ctx } /> }
     </div>
   }
