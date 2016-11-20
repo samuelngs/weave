@@ -21,11 +21,24 @@ export default class Wrapper extends Component {
   };
 
   async componentWillMount() {
+
     const { view } = this.props;
     if ( !view ) return;
+
     const ctx = await context();
-    const props = await (typeof view.getInitialProps === 'function' ? view.getInitialProps(ctx) : defaults.object);
-    this.setState({ initialized: true, props, ctx });
+
+    let props = await (typeof view.getInitialProps === 'function' ? view.getInitialProps(ctx) : defaults.object);
+    if (typeof props !== 'object' || props === null) props = defaults.object;
+
+    let title = await (typeof view.getTitle === 'function' ? view.getTitle(props) : defaults.string);
+    if (typeof title !== 'string') title = defaults.string;
+
+    let metas = await (typeof view.getMetaTags === 'function' ? view.getMetaTags(props) : defaults.array);
+    if (!Array.isArray(metas)) metas = defaults.array;
+
+    this.setState({ initialized: true, props, ctx }, () => {
+      if (document.title !== title) document.title = title;
+    });
   }
 
   classes() {
