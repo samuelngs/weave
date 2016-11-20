@@ -16,18 +16,19 @@ export async function mount(App, ctx) {
 
 export async function print(App, ctx) {
   const { app, meta, title } = await router(App, ctx);
-  return `<!doctype html>
-<html>
-  ${InfernoServer.renderToString(<head>
-    <title>{ title }</title>
-    { meta.map(i => <meta { ...i } />) }
-    <link media="all" rel="stylesheet" href="/assets/styles.css" />
-  </head>)}
-  <body>
-    <div id="${id}">${InfernoServer.renderToString(app)}</div>
-    <script type="text/javascript" charset="utf-8" src="/assets/client.js"></script>
-  </body>
-</html>`;
+  return `<!doctype html>${InfernoServer.renderToString(
+    <html>
+      <head>
+      <title>{ title }</title>
+      { meta.map(i => <meta { ...i } />) }
+      <link media="all" rel="stylesheet" href="/assets/styles.css" />
+      </head>
+      <body>
+        <div id={id}>{ app }</div>
+        <script type="text/javascript" charset="utf-8" src="/assets/client.js" />
+      </body>
+    </html>
+  )}`;
 }
 
 export default async function render(App, ctx) {
