@@ -11,14 +11,10 @@ A framework for building universal inferno applications
 * Redux persistent storage with `localforage`
 * Redux Thunk support
 * Initial props when page loads `static async getInitialProps ({ navigator, location, document, cookies, headers })`
+* async `getTitle` and `getMetaTags` are called and results are written into the head of the response
 * [Redux-Devtools Chrome Extension](https://github.com/zalmoxisus/redux-devtools-extension)
 * CSS Modules
 * Live reload
-
-## TODO
-
-- [ ] Head component
-- [ ] Hot code reloading
 
 ## Installation
 
@@ -54,24 +50,14 @@ export default () => <Router>
 ```
 ## Usage
 
-#### CSS
-
-```
-import styles from './styles.css'
-
-const view = () => <div className={styles.something}>
-  ...
-</div>
-```
-
-#### Props initialization
+#### Initialization
 ```
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
 export default class Path extends Component {
 
-  static async getInitialProps ({ location }) {
+  static async getInitialProps({ location }) {
     return { pathname: location.pathname };
   }
 
@@ -81,6 +67,30 @@ export default class Path extends Component {
 }
 ```
 
+#### Title and Meta tags
+```
+import Inferno from 'inferno';
+import Component from 'inferno-component';
+
+export default class Sample extends Component {
+
+  static async getInitialProps({ location }) {
+    return { pathname: location.pathname };
+  }
+
+  static async getTitle(props) {
+    return `${props.pathname}`;
+  }
+
+  static async getMetaTags(props) {
+    return [{ charset: 'utf-8' }];
+  }
+
+  render() {
+    return <div>Path: { this.props.pathname }</div>
+  }
+}
+```
 
 #### Redux
 ```
@@ -96,6 +106,16 @@ const reducers = { counter };
 export default () => <Router reducers={ reducers }>
   ...
 </Router>
+```
+
+#### CSS
+
+```
+import styles from './styles.css'
+
+const view = () => <div className={styles.something}>
+  ...
+</div>
 ```
 
 ## Development
@@ -144,3 +164,4 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
