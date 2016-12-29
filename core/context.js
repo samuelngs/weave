@@ -23,7 +23,6 @@ async function cookies() {
   const res = { };
   const str = (document.cookie || defaults.string).trim();
   if (str.length === 0) {
-    return res;
   }
   const cookies = str.split(', ');
   for (let i = 0; i < cookies.length; i++) {
@@ -41,6 +40,8 @@ export async function server(req, res) {
   const ua = uaparser(req.headers['user-agent']);
   const lang = await languages(req.headers['accept-language']);
   return {
+    req,
+    res,
     navigator: {
       appCodeName: ua.browser.name,
       appName: ua.browser.name,

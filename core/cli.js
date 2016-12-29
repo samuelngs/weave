@@ -4,16 +4,24 @@ import path from 'path';
 import temp from 'temporary';
 import compiler from './build/dev';
 
+let devServer;
+
 const arg = process.argv.slice(2);
 const tmp = new temp.Dir();
 
-const clean = function(e) {
+const rmdir = (tmp) => {
+  try {
+    if ( typeof tmp !== 'undefined') tmp.rmdirSync();
+  } catch(e) { }
+}
+
+const clean = (e) => {
   if (e) {
     console.log('force stopping server => ', e);
   } else {
     console.log('stopping dev server...');
   }
-  tmp.rmdir();
+  rmdir(tmp);
   process.exit(0);
 }
 
@@ -27,5 +35,5 @@ if (!fs.lstatSync(dir).isDirectory()) {
   dir = path.dirname(dir);
 }
 
-compiler(dir, tmp.path)
+compiler(dir, tmp.path);
 

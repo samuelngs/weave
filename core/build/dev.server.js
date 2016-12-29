@@ -2,6 +2,8 @@
 import path from 'path';
 import webpack from 'webpack';
 
+import WriteFilePlugin from 'write-file-webpack-plugin';
+
 const alias = { };
 [
   'babel-runtime',
@@ -15,16 +17,22 @@ const alias = { };
 });
 
 export default (dir, tmp) => ({
-  name: 'script',
+  name: 'server',
   target: 'node',
-  cache:   false,
-  context: dir,
-  entry: './index.js',
+  context: path.join(__dirname, '..'),
+  entry: [
+    'webpack/hot/signal',
+    './server.js',
+  ],
+  devtool: 'eval',
   output: {
     path: tmp,
-    filename: './script.js',
-    publicPath: 'assets/',
+    filename: './server.js',
+    publicPath: `http://localhost:5001/`,
     libraryTarget: 'commonjs2',
+  },
+  devServer: {
+    outputPath: tmp,
   },
   module: {
     loaders: [
@@ -47,6 +55,8 @@ export default (dir, tmp) => ({
                   'weave-router': path.join(__dirname, '..', 'router.js'),
                   'weave-render': path.join(__dirname, '..', 'render.js'),
                   'weave-context': path.join(__dirname, '..', 'context.js'),
+                  'weave-head': path.join(__dirname, '..', 'head.js'),
+                  'application': path.join(dir, 'index.js'),
                 },
               },
             ],
@@ -77,14 +87,22 @@ export default (dir, tmp) => ({
     root: [
       dir,
     ],
+    alias: {
+      application: dir,
+    },
     extensions: ['', '.js', '.jsx', '.css'],
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin({ multiStep: true }),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.ProvidePlugin({
       fetch: 'isomorphic-fetch',
     }),
+    new webpack.DefinePlugin({
+      $dirname: '__dirname',
+    }),
+    new WriteFilePlugin({ log: false }),
   ],
   node: {
     __filename: true,

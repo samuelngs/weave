@@ -1,34 +1,39 @@
 
 import Inferno from 'inferno';
-import InfernoDOM from 'inferno-dom';
-import InfernoServer from 'inferno-server';
+import { Provider } from 'inferno-redux';
+import { renderToString } from 'inferno-server';
+import createHistory from 'history/createMemoryHistory';
 
-import router from './router';
+import router, { components } from './router';
 import context from './context';
-
-const id = 'app';
+import offline from './offline';
 
 export async function mount(App, ctx) {
   const state = await context();
-  const { app, meta, title } = await router(App, state);
-  InfernoDOM.render(app, document.getElementById(id));
+  const { app, store } = await router(App, state);
+  Inferno.render(<Provider store={ store }>{ app }</Provider>, document.body.childNodes[0]);
+  setImmediate(offline);
 }
 
 export async function print(App, ctx) {
-  const { app, meta, title } = await router(App, ctx);
-  return `<!doctype html>${InfernoServer.renderToString(
-    <html>
-      <head>
+  const { app, store } = await router(App, ctx);
+  const body = renderToString(<body>
+    <main>
+      <Provider store={ store }>
+        { app }
+      </Provider>
+    </main>
+    <script type="text/javascript" charset="utf-8" src="/assets/client.js" />
+  </body>);
+  const { title, meta, link } = store.getState();
+  const head = renderToString(
+    <head>
       <title>{ title }</title>
       { meta.map(i => <meta { ...i } />) }
       <link media="all" rel="stylesheet" href="/assets/styles.css" />
-      </head>
-      <body>
-        <div id={id}>{ app }</div>
-        <script type="text/javascript" charset="utf-8" src="/assets/client.js" />
-      </body>
-    </html>
-  )}`;
+    </head>
+  );
+  ctx.res.status(200).send(`<!doctype html><html>${head}${body}</html>`);
 }
 
 export default async function render(App, ctx) {

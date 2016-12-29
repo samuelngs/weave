@@ -14,6 +14,9 @@ export default function server(App, dir = process.cwd()) {
   const app = express();
   const port = 5000;
 
+  let router = App;
+  let update = replace => router = replace;
+
   app.use(compression());
   app.use(cookies());
 
@@ -21,22 +24,16 @@ export default function server(App, dir = process.cwd()) {
 
   app.use('/ctx', (req, res) => res.json(req.headers));
 
-
   if (process.env.NODE_ENV !== 'production') {
-    app.use('/sw.js', express.static(path.join(dir, 'sw.js')));
+    app.use('/sw.js', proxy(url.parse('http://127.0.0.1:5001')));
     app.use('/assets', proxy(url.parse('http://127.0.0.1:5001/assets')));
   } else {
     app.use('/sw.js', (req, res) => res.sendFile(path.join(dir, 'sw.js')));
     app.use('/assets', express.static(path.join(dir, 'assets')));
   }
 
-  app.use('/*', async (req, res) => {
-    return res.
-      status(200).
-      send(
-        await render(App, await context(req, res)),
-      );
-  });
+  app.use('/*', async (req, res) => await render(router, await context(req, res)));
 
-  return { port, app };
+  return { port, app, update };
 }
+

@@ -22,7 +22,7 @@ export default (dir, tmp) => ({
   target: 'web',
   context: path.join(__dirname, '..'),
   entry: [
-    'webpack-dev-server/client?http://127.0.0.1:5001',
+    'webpack-dev-server/client?http://localhost:5001',
     'webpack/hot/only-dev-server',
     './client.js',
   ],
@@ -30,7 +30,7 @@ export default (dir, tmp) => ({
   output: {
     path: tmp,
     filename: 'assets/client.js',
-    publicPath: 'assets/',
+    publicPath: `http://localhost:5001/`,
   },
   module: {
     loaders: [
@@ -53,6 +53,7 @@ export default (dir, tmp) => ({
                   'weave-router': path.join(__dirname, '..', 'router.js'),
                   'weave-render': path.join(__dirname, '..', 'render.js'),
                   'weave-context': path.join(__dirname, '..', 'context.js'),
+                  'weave-head': path.join(__dirname, '..', 'head.js'),
                   'application': path.join(dir, 'index.js'),
                 },
               },
@@ -91,7 +92,8 @@ export default (dir, tmp) => ({
     extensions: ['', '.js', '.jsx', '.css'],
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin({ multiStep: true }),
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NamedModulesPlugin(),
     new webpack.NoErrorsPlugin(),
     new webpack.ProvidePlugin({
       fetch: 'isomorphic-fetch',

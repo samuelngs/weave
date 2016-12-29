@@ -1,84 +1,85 @@
 
-export const EMPTY = {};
+const unmatch = { components: [ ], params: { } };
 
-function segmentize(url) {
-  return strip(url).split('/');
+function matchRoute(route, parts, matched) {
+  let match = false;
+  const { props: { path, children, component } } = route;
+  const [ segment, ...rest ] = parts;
+  if ( typeof path !== 'string' && path !== -1 ) {
+    return false;
+  }
+  if ( path === -1 ) {
+    if ( typeof component === 'function' ) {
+      matched.components.push(component);
+    }
+    match = true;
+  } else if ( typeof path === 'string' ) {
+    if ( path.charAt(0) === ':' ) {
+      const param = path.replace(/(^\:|[+*?]+$)/g, '');
+      matched.params[param] = segment;
+      if ( typeof component === 'function' ) {
+        matched.components.push(component);
+      }
+      match = true;
+    }
+    if ( path === segment ) {
+      if ( typeof component === 'function' ) {
+        matched.components.push(component);
+      }
+      match = true;
+    }
+    if ( path === '*' ) {
+      if ( typeof component === 'function' ) {
+        matched.components.push(component);
+      }
+      match = true;
+    }
+    if ( rest.length === 0 && match === true ) {
+      return matched;
+    }
+  }
+  if ( typeof children === 'object' && children !== null ) {
+    if ( Array.isArray(children) ) {
+      return matchRoutesDeep(children, path === -1 ? parts : rest, matched);
+    }
+    return matchRoutesDeep([ children ], path === -1 ? parts : rest, matched);
+  }
+  return false;
 }
 
-function strip(url) {
+function matchRoutes(routes, parts) {
+  for ( const route of routes ) {
+    const matched = { components: [ ], params: { } };
+    const matches = matchRoute(route, parts, matched);
+    if ( matches ) {
+      return matches;
+    }
+  }
+  return unmatch;
+}
+
+function matchRoutesDeep(routes, parts, matched) {
+  for ( const route of routes ) {
+    const matches = matchRoute(route, parts, matched);
+    if ( matches ) {
+      return matches;
+    }
+  }
+  return false;
+}
+
+export function strip(url = '') {
   return url.replace(/(^\/+|\/+$)/g, '');
 }
 
-export function convertToHashbang(url) {
-  if (url.indexOf('#') === -1) {
-    url = '/';
-  } else {
-    const splitHashUrl = url.split('#!');
-    splitHashUrl.shift();
-    url = splitHashUrl.join('');
-  }
-  return url;
+export function segmentize(url = '') {
+  return strip(url).split('/');
 }
 
-// Thanks goes to Preact for this function: https://github.com/developit/preact-router/blob/master/src/util.js#L4
-// Wildcard support is added on top of that.
-export function exec(url, route, opts = EMPTY) {
-  let reg = /(?:\?([^#]*))?(#.*)?$/,
-    c = url.match(reg),
-    matches = {},
-    ret;
-  if (c && c[1]) {
-    let p = c[1].split('&');
-    for (let i = 0; i < p.length; i++) {
-      let r = p[i].split('=');
-      matches[decodeURIComponent(r[0])] = decodeURIComponent(r.slice(1).join('='));
-    }
+export function match(routes, location) {
+  const url = segmentize(location);
+  if ( Array.isArray(routes) ) {
+    return matchRoutes(routes, url);
   }
-  url = segmentize(url.replace(reg, ''));
-  route = segmentize(route || '');
-  let max = Math.max(url.length, route.length);
-  let hasWildcard = false;
-
-  for (let i = 0; i < max; i++) {
-    if (route[i] && route[i].charAt(0) === ':') {
-      let param = route[i].replace(/(^\:|[+*?]+$)/g, ''),
-        flags = (route[i].match(/[+*?]+$/) || EMPTY)[0] || '',
-        plus = ~flags.indexOf('+'),
-        star = ~flags.indexOf('*'),
-        val = url[i] || '';
-      if (!val && !star && (flags.indexOf('?') < 0 || plus)) {
-        ret = false;
-        break;
-      }
-      matches[param] = decodeURIComponent(val);
-      if (plus || star) {
-        matches[param] = url.slice(i).map(decodeURIComponent).join('/');
-        break;
-      }
-    }
-    else if (route[i] !== url[i] && !hasWildcard) {
-      if (route[i] === '*' && route.length === i + 1) {
-        hasWildcard = true;
-      } else {
-        ret = false;
-        break;
-      }
-    }
-  }
-  if (opts.default !== true && ret === false) {
-    return false;
-  }
-  return matches;
+  return matchRoutes([ routes ], url);
 }
-
-export function pathRankSort(a, b) {
-  let aAttr = a.attrs || EMPTY,
-    bAttr = b.attrs || EMPTY;
-  let diff = rank(bAttr.path) - rank(aAttr.path);
-  return diff || (bAttr.path.length - aAttr.path.length);
-}
-
-function rank(url) {
-  return (strip(url).match(/\/+/g) || '').length;
-}
-

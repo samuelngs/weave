@@ -1,4 +1,4 @@
 
 export default function offline () {
-  require('offline-plugin/runtime').install();
+  if ( typeof window !== 'undefined' ) require('offline-plugin/runtime').install();
 }

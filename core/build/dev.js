@@ -2,51 +2,58 @@
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 
-import express from '../express';
+import chokidar from 'chokidar';
 
 import client from './dev.client.js';
 import server from './dev.server.js';
 
 const config = {
-  hot: false,
-  host: '0.0.0.0',
-  port: 5001,
+  hot: true,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Expose-Headers': 'SourceMap,X-SourceMap',
+  },
+  watchOptions: {
+    aggregateTimeout: 300,
+    poll: false,
+  },
+  historyApiFallback: true,
   inline: true,
   quiet: false,
   noInfo: false,
   stats: {
-    hash: false,
+    assets: false,
+    colors: true,
     version: false,
+    hash: false,
     timings: false,
-    assets: true,
     chunks: false,
-    modules: false,
-    reasons: true,
-    children: false,
-    source: true,
-    errors: true,
-    errorDetails: true,
-    warnings: true,
-    publicPath: true
-  }
+    warnings: false,
+    chunkModules: false,
+  },
 };
 
 export default (dir, tmp) => {
-  const compiler = webpack([
+  return new WebpackDevServer(webpack([
     server(dir, tmp),
     client(dir, tmp),
-  ], function(err, res) {
-    if (err) throw err;
-    const { app, port } = express(require(`${tmp}/script`).default, tmp);
-    app.listen(port, () => {
-      console.log('Server running on port ' + port);
-    });
-    new WebpackDevServer(compiler, {
-      ...config,
-      contentBase: tmp,
-    }).listen(config.port, config.host, (err) => {
-      if (err) console.error(err)
+  ]), {
+    ...config,
+    outputPath: tmp,
+  }).listen(5001, '0.0.0.0', err => {
+    if (err) console.error(err);
+    const watcher = chokidar.watch(`${tmp}/server.js`);
+    watcher.on('ready', () => {
+      let server;
+      watcher.on('add', () => {
+        server = require(`${tmp}/server.js`);
+        server.start();
+      });
+      watcher.on('change', () => {
+        delete require.cache[require.resolve(`${tmp}/server.js`)];
+        const { router } = require(`${tmp}/server.js`);
+        server.patch(router());
+      });
     });
   });
-  return compiler;
 }
