@@ -44,6 +44,37 @@ export class Head extends Component {
         dispatch(item);
       }
     });
+    this.after();
+  }
+
+  after() {
+    if ( typeof window === 'undefined' ) return;
+    const { store: { getState } } = this.context;
+    const { title, meta, link } = getState();
+    if ( typeof document === 'undefined' ) return;
+    document.title = title;
+    const metas = document.head.querySelectorAll('meta:not([data-weave="true"])');
+    for ( const el of metas ) {
+      if ( el.parentNode ) el.parentNode.removeChild(el);
+    }
+    const links = document.head.querySelectorAll('link:not([data-weave="true"])');
+    for ( const el of links ) {
+      if ( el.parentNode ) el.parentNode.removeChild(el);
+    }
+    for ( const item of meta ) {
+      const el = document.createElement('meta');
+      for ( const key in item ) {
+        el[key] = item[key];
+      }
+      document.head.appendChild(el);
+    }
+    for ( const item of link ) {
+      const el = document.createElement('link');
+      for ( const key in item ) {
+        el[key] = item[key];
+      }
+      document.head.appendChild(el);
+    }
   }
 
   patch(item) {

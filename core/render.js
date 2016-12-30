@@ -22,7 +22,7 @@ export async function print(App, ctx) {
         { app }
       </Provider>
     </main>
-    <script type="text/javascript" charset="utf-8" src="/assets/client.js" />
+    <script data-weave="true" type="text/javascript" charset="utf-8" src="/assets/client.js" />
   </body>);
   const { title, meta, link } = store.getState();
   const head = renderToString(
@@ -30,7 +30,7 @@ export async function print(App, ctx) {
       <title>{ title }</title>
       { meta.map(i => <meta { ...i } />) }
       { link.map(i => <link { ...i } />) }
-      <link media="all" rel="stylesheet" href="/assets/styles.css" />
+      <link data-weave="true" media="all" rel="stylesheet" href="/assets/styles.css" />
     </head>
   );
   ctx.res.status(200).send(`<!doctype html><html>${head}${body}</html>`);
