@@ -20,26 +20,30 @@ export class Head extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.defaults();
     this.apply();
   }
 
-  defaults() {
-    const { context: { store: { dispatch } } } = this;
-    dispatch(clearTitle());
-    dispatch(clearMetas());
-    dispatch(clearLinks());
-  }
-
   apply() {
-    const { children } = this.props;
+    const {
+      context: { store: { dispatch, getState } },
+      props: { children },
+    } = this;
+    const queue = [ ];
     if ( typeof children === 'object' && children !== null ) {
-      if ( Array.isArray(children) ) {
-        children.map(item => this.patch(item));
-      } else {
-        this.patch(children);
+      const items = Array.isArray(children) ? children : [ children ];
+      for ( const item of items ) {
+        const patch = this.patch(item);
+        if ( patch ) queue.push(patch);
       }
     }
+    dispatch(dispatch => {
+      dispatch(clearTitle());
+      dispatch(clearMetas());
+      dispatch(clearLinks());
+      for ( const item of queue ) {
+        dispatch(item);
+      }
+    });
   }
 
   patch(item) {
@@ -52,17 +56,17 @@ export class Head extends Component {
       case Link:
         return this.inject('link', item.props);
     }
+    return null;
   }
 
   inject(type, props) {
-    const { context: { store: { dispatch } } } = this;
     switch ( type ) {
       case 'title':
-        return dispatch(setTitle(props.children));
+        return setTitle(props.children);
       case 'meta':
-        return dispatch(addMeta(props));
+        return addMeta(props);
       case 'link':
-        return dispatch(addLink(props));
+        return addLink(props);
     }
   }
 

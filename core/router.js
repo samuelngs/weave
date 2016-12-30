@@ -6,6 +6,9 @@ import { compose, createStore, combineReducers, applyMiddleware } from 'redux';
 import { persistStore, autoRehydrate, getStoredState } from 'redux-persist';
 import thunk from 'redux-thunk';
 
+import createBrowserHistory from 'history/createBrowserHistory';
+import createMemoryHistory from 'history/createMemoryHistory';
+
 import { Router as IRouter, Route as IRoute, IndexRoute as IIndexRoute } from './route';
 import { strip } from './utils';
 
@@ -27,7 +30,11 @@ function isBrowser() {
   return typeof window !== 'undefined';
 }
 
-export async function redux(reducers) {
+function createHistory(props = { }) {
+  return isBrowser() ? createBrowserHistory(props) : createMemoryHistory(props);
+}
+
+async function redux(reducers) {
   const reducer = combineReducers(
     typeof reducers === 'object' && reducers != null
     ? { ...reducers, ...internalReducers }
@@ -47,16 +54,6 @@ export async function redux(reducers) {
   }
   await getStoredState(config);
   return store;
-}
-
-export async function components(route, arr = []) {
-  const { props } = route;
-  if ( !props ) return arr;
-  const { children, component } = props;
-  if ( component ) arr.push(component);
-  if ( !children ) return arr;
-  components(children, arr);
-  return arr;
 }
 
 async function patch(route, store, ctx) {
@@ -114,7 +111,11 @@ export default async function(App, ctx) {
   const root = new App(ctx);
   const store = await redux(root.props && root.props.reducers);
   const children = await routes(root, store, ctx);
-  const app = <IRouter location={ pathname }>
+  const history = createHistory({
+    initialEntries: [ pathname ],
+    initialIndex: 0,
+  });
+  const app = <IRouter history={history}>
     {children}
   </IRouter>
   return { app, store };

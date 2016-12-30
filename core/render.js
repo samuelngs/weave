@@ -2,7 +2,6 @@
 import Inferno from 'inferno';
 import { Provider } from 'inferno-redux';
 import { renderToString } from 'inferno-server';
-import createHistory from 'history/createMemoryHistory';
 
 import router, { components } from './router';
 import context from './context';
@@ -30,6 +29,7 @@ export async function print(App, ctx) {
     <head>
       <title>{ title }</title>
       { meta.map(i => <meta { ...i } />) }
+      { link.map(i => <link { ...i } />) }
       <link media="all" rel="stylesheet" href="/assets/styles.css" />
     </head>
   );
