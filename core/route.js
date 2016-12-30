@@ -3,6 +3,7 @@ import Inferno from 'inferno';
 import Component from 'inferno-component';
 import createElement from 'inferno-create-element';
 
+import context from './context';
 import { match, strip } from './utils';
 import { push } from './actions/history';
 
@@ -33,11 +34,16 @@ export class Router extends Component {
 
   state = {
     store: this.context.store.getState(),
-    prev: { },
+    prev: defaults.object,
     curr: { ...this.props.props },
+    ctx : { ...this.props.ctx },
     prerendered: false,
     reinit: false,
     drawed: false,
+  }
+
+  async componentUpdateContext() {
+    this.setState({ ctx: await context() });
   }
 
   async componentWillMount() {
@@ -50,21 +56,22 @@ export class Router extends Component {
     const { history } = this.props;
     const { store: { dispatch, subscribe } } = this.context;
     this.unlisten = history.listen(async ({ pathname }, action) => {
+      await this.componentUpdateContext();
       await this.componentWillRedraw(pathname);
     });
     subscribe(async () => {
       const { store: { getState } } = this.context;
       this.patch(getState());
     });
-    this.setState({ prerendered: true, drawed: true });
+    this.setState({ prerendered: true, drawed: true, ctx: await context() });
   }
 
   async componentWillInitialize(component, ctx) {
     if ( typeof component.getInitialProps === 'function' ) {
       const props = await component.getInitialProps(ctx);
-      return typeof props === 'object' && props !== null ? props : { };
+      return typeof props === 'object' && props !== null ? props : defaults.object;
     }
-    return { };
+    return defaults.object;
   }
 
   async componentWillRedraw(pathname) {
@@ -72,21 +79,15 @@ export class Router extends Component {
   }
 
   async componentOnRedraw(pathname) {
-    const { curr } = this.state;
-    const { children, navigator, location, document, cookies, headers } = this.props;
+    const { curr, ctx } = this.state;
+    const { children } = this.props;
     const { components, params } = match(children, pathname);
-    const props = await Promise.all(components.map(async (component) => await this.componentWillInitialize(component, {
-      navigator,
-      location,
-      document,
-      cookies,
-      headers,
-    })));
+    const props = await Promise.all(components.map(async (component) => await this.componentWillInitialize(component, ctx)));
     this.setState({ reinit: false, drawed: false, prev: curr, curr: props }, async () => await this.componentDidRedraw(pathname));
   }
 
   async componentDidRedraw(pathname) {
-    const { store: { dispatch, getState } } = this.context;
+    const { store: { dispatch } } = this.context;
     dispatch(push(pathname));
     this.setState({ drawed: true, prev: defaults.object });
   }
@@ -112,7 +113,7 @@ export class Router extends Component {
   }
 
   getChildContext() {
-    const { navigator, location, cookies, headers, history: { push, listen, location: { pathname } } } = this.props;
+    const { history: { push, listen, location: { pathname } } } = this.props;
     return {
       router: {
         push,
@@ -121,10 +122,6 @@ export class Router extends Component {
           pathname,
         },
       },
-      navigator,
-      location,
-      cookies,
-      headers,
     };
   }
 

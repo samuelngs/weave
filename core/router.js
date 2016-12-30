@@ -139,7 +139,7 @@ export default async function(App, ctx) {
   });
   const { components, params } = match(children, pathname);
   const props = await Promise.all(components.map(async (component) => await initialize(component, ctx)));
-  const app = <IRouter { ...ctx } history={history} components={components} props={props} params={params}>
+  const app = <IRouter history={history} components={components} props={props} params={params} ctx={ctx}>
     {children}
   </IRouter>
   return { app, store };

@@ -24,7 +24,7 @@ async function cookies() {
   const str = (document.cookie || defaults.string).trim();
   if (str.length === 0) {
   }
-  const cookies = str.split(', ');
+  const cookies = str.split('; ');
   for (let i = 0; i < cookies.length; i++) {
     const cur = cookies[i].split('=');
     res[cur[0]] = cur[1] || defaults.string;
