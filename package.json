@@ -1,6 +1,6 @@
 {
   "name": "weave-io",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "A framework for building universal inferno applications",
   "main": "./build/index.js",
   "scripts": {
@@ -27,12 +27,12 @@
     "offline-first"
   ],
   "dependencies": {
-    "inferno": "beta43",
-    "inferno-server": "beta43",
-    "inferno-router": "beta43",
-    "inferno-component": "beta43",
-    "inferno-create-element": "beta43",
-    "inferno-redux": "beta43",
+    "inferno": "beta44",
+    "inferno-server": "beta44",
+    "inferno-router": "beta44",
+    "inferno-component": "beta44",
+    "inferno-create-element": "beta44",
+    "inferno-redux": "beta44",
     "redux": "^3.6.0",
     "redux-persist": "4.0.0-alpha7",
     "redux-thunk": "^2.1.0",
