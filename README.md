@@ -11,7 +11,7 @@ A framework for building universal inferno applications
 * Redux persistent storage with `localforage`
 * Redux Thunk support
 * Initial props when page loads `static async getInitialProps ({ navigator, location, document, cookies, headers })`
-* async `getTitle` and `getMetaTags` are called and results are written into the head of the response
+* Appending elements to the `<head>`
 * [Redux-Devtools Chrome Extension](https://github.com/zalmoxisus/redux-devtools-extension)
 * CSS Modules
 * Live reload
@@ -44,8 +44,8 @@ import { Router, Route } from 'weave-router';
 const Weave = (props) => <div>Welcome to Weave!</div>
 
 export default () => <Router>
-  <Route path={"/"} component={Weave} />
-  <Route path={"*"} component={Weave} />
+  <Route path="/" component={Weave} />
+  <Route path="*" component={Weave} />
 </Router>
 ```
 ## Usage
@@ -72,22 +72,23 @@ export default class Path extends Component {
 import Inferno from 'inferno';
 import Component from 'inferno-component';
 
+import { Head, Title, Meta } from 'weave-head';
+
 export default class Sample extends Component {
 
   static async getInitialProps({ location }) {
     return { pathname: location.pathname };
   }
 
-  static async getTitle(props) {
-    return `${props.pathname}`;
-  }
-
-  static async getMetaTags(props) {
-    return [{ charset: 'utf-8' }];
-  }
-
   render() {
-    return <div>Path: { this.props.pathname }</div>
+    const { pathname } = this.props;
+    return <div>
+      <Head>
+        <Title>{ pathname }</Title>
+        <Meta name="description" content="content here" />
+      </Head>
+      Path: { this.props.pathname }
+    </div>
   }
 }
 ```
