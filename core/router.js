@@ -10,7 +10,7 @@ import createBrowserHistory from 'history/createBrowserHistory';
 import createMemoryHistory from 'history/createMemoryHistory';
 
 import { Router as IRouter, Route as IRoute, IndexRoute as IIndexRoute } from './route';
-import { strip } from './utils';
+import { match, strip } from './utils';
 
 import NotFound from './components/404';
 
@@ -88,6 +88,14 @@ async function routes(router, store, ctx) {
   return await patch(children, store, ctx);
 }
 
+async function initialize(component, ctx) {
+  if ( typeof component.getInitialProps === 'function' ) {
+    const props = await component.getInitialProps(ctx);
+    return typeof props === 'object' && props !== null ? props : { };
+  }
+  return { };
+}
+
 export function Router({ children }) {
   if ( typeof children === 'undefined' || children === null ) {
     return [ <IRoute path="*" component={NotFound} /> ];
@@ -115,7 +123,9 @@ export default async function(App, ctx) {
     initialEntries: [ pathname ],
     initialIndex: 0,
   });
-  const app = <IRouter history={history}>
+  const { components, params } = match(children, pathname);
+  const props = await Promise.all(components.map(async (component) => await initialize(component, ctx)));
+  const app = <IRouter { ...ctx } history={history} components={components} props={props} params={params}>
     {children}
   </IRouter>
   return { app, store };
