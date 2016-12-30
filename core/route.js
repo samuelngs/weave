@@ -88,7 +88,7 @@ export class Router extends Component {
   async componentDidRedraw(pathname) {
     const { store: { dispatch } } = this.context;
     dispatch(push(pathname));
-    this.setState({ drawed: true });
+    this.setState({ drawed: true, prev: defaults.object });
   }
 
   async componentWillUnmount() {

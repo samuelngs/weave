@@ -11,10 +11,9 @@ import createMemoryHistory from 'history/createMemoryHistory';
 
 import { Router as IRouter, Route as IRoute, IndexRoute as IIndexRoute } from './route';
 import { match, strip } from './utils';
+import internalReducers from './reducers';
 
 import NotFound from './components/404';
-
-import internalReducers from './reducers';
 
 const defaults = {
   string: '',
@@ -112,6 +111,21 @@ export function Route(props, context) {
 
 export function IndexRoute(props, context)  {
   return <IIndexRoute { ...props } path="/" context={context} />
+}
+
+export function To(e) {
+  e.preventDefault && e.preventDefault();
+  const { context } = this;
+  if ( !context ) return;
+  const { router: { push } } = context;
+  if ( !push ) return;
+  const parser = document.createElement('a');
+  parser.href = e.target.href;
+  return push(parser.pathname);
+}
+
+export function Link(props, context) {
+  return <a { ...props } onClick={To.bind({ props, context })} />
 }
 
 export default async function(App, ctx) {
