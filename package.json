@@ -1,6 +1,6 @@
 {
   "name": "weave-io",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "A framework for building universal inferno applications",
   "main": "./build/index.js",
   "scripts": {

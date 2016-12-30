@@ -3,7 +3,7 @@ A framework for building universal inferno applications
 
 ## Feature
 
-* Inferno
+* Inferno 1.0 (beta 44)
 * Express 4
 * Universal rendering (Server-side and Browser)
 * Offline-first
