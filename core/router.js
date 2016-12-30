@@ -90,9 +90,9 @@ async function routes(router, store, ctx) {
 async function initialize(component, ctx) {
   if ( typeof component.getInitialProps === 'function' ) {
     const props = await component.getInitialProps(ctx);
-    return typeof props === 'object' && props !== null ? props : { };
+    return typeof props === 'object' && props !== null ? props : defaults.object;
   }
-  return { };
+  return defaults.object;
 }
 
 export function Router({ children }) {

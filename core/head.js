@@ -23,6 +23,30 @@ export class Head extends Component {
     this.apply();
   }
 
+  componentDidUpdate(props) {
+    const { children: nch } = props;
+    const { children: och } = this.props;
+    const nc = Array.isArray(nch) ? nch : ( typeof nch === 'object' && nch !== null ? [ nch ] : [ ] );
+    const oc = Array.isArray(och) ? och : ( typeof och === 'object' && och !== null ? [ och ] : [ ] );
+    if ( nc.length !== oc.length ) {
+      return this.apply();
+    }
+    for ( let i = 0; i < nc.length; i++ ) {
+      const { props: np } = nc[i];
+      const { props: op } = oc[i];
+      const nk = Object.keys(np);
+      const ok = Object.keys(op);
+      if ( nk.length !== ok.length ) {
+        return this.apply();
+      }
+      for ( const key of nk ) {
+        if ( nk[key] !== ok[key] ) {
+          return this.apply();
+        }
+      }
+    }
+  }
+
   apply() {
     const {
       context: { store: { dispatch, getState } },
