@@ -1,6 +1,6 @@
 {
   "name": "weave-io",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "A framework for building universal inferno applications",
   "main": "./build/index.js",
   "scripts": {
@@ -29,7 +29,7 @@
   "dependencies": {
     "inferno": "1.0.3",
     "inferno-server": "1.0.3",
-    "inferno-router": "1.0.3",
+    "inferno-compat": "1.0.3",
     "inferno-component": "1.0.3",
     "inferno-create-element": "1.0.3",
     "inferno-redux": "1.0.3",

@@ -53,9 +53,9 @@ export default (dir) => ({
               {
                 alias: {
                   ...alias,
+                  'react': require.resolve('inferno-compat'),
+                  'react-dom': require.resolve('inferno-compat'),
                   'weave-router': path.join(__dirname, '..', 'router.js'),
-                  'weave-render': path.join(__dirname, '..', 'render.js'),
-                  'weave-context': path.join(__dirname, '..', 'context.js'),
                   'weave-head': path.join(__dirname, '..', 'head.js'),
                   'application': path.join(dir, 'index.js'),
                 },
