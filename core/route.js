@@ -135,7 +135,7 @@ export class Router extends Component {
 
   renderComponent(components = null, params = defaults.object, props = defaults.array, idx = defaults.number) {
     const { history } = this.props;
-    const { reinit, drawed } = this.state;
+    const { reinit, drawed, ctx: { navigator, location, cookies, headers } } = this.state;
     const component = components[idx];
     if ( !component ) return null;
     const prop = props[idx] || defaults.object;
@@ -143,9 +143,9 @@ export class Router extends Component {
     if ( reinit && !drawed ) args.initializing = true;
     const children = this.renderComponent(components, params, props, idx + 1);
     if ( typeof children === 'object' && typeof children !== null ) {
-      return createElement(component, { ...prop, ...args, history, params }, children);
+      return createElement(component, { ...prop, ...args, navigator, location, cookies, headers, history, params }, children);
     }
-    return createElement(component, { ...prop, ...args, history, params }, null);
+    return createElement(component, { ...prop, ...args, navigator, location, cookies, headers, history, params }, null);
   }
 
   prerender() {
