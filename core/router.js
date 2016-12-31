@@ -138,9 +138,11 @@ export default async function(App, ctx) {
     initialIndex: 0,
   });
   const { components, params } = match(children, pathname);
-  const props = await Promise.all(components.map(async (component) => await initialize(component, ctx)));
+  const props = typeof window === 'undefined'
+    ? await Promise.all(components.map(async (component) => await initialize(component, ctx)))
+    : window._$ || defaults.array;
   const app = <IRouter history={history} components={components} props={props} params={params} ctx={ctx}>
     {children}
   </IRouter>
-  return { app, store };
+  return { app, store, props };
 }

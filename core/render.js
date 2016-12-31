@@ -7,6 +7,8 @@ import router, { components } from './router';
 import context from './context';
 import offline from './offline';
 
+const script = `<script data-weave="true" type="text/javascript" charset="utf-8" src="/assets/client.js"></script>`;
+
 export async function mount(App, ctx) {
   const state = await context();
   const { app, store } = await router(App, state);
@@ -15,14 +17,13 @@ export async function mount(App, ctx) {
 }
 
 export async function print(App, ctx) {
-  const { app, store } = await router(App, ctx);
+  const { app, store, props } = await router(App, ctx);
   const body = renderToString(<body>
     <main>
       <Provider store={ store }>
         { app }
       </Provider>
     </main>
-    <script data-weave="true" type="text/javascript" charset="utf-8" src="/assets/client.js" />
   </body>);
   const { title, meta, link } = store.getState();
   const head = renderToString(
@@ -33,7 +34,8 @@ export async function print(App, ctx) {
       <link data-weave="true" media="all" rel="stylesheet" href="/assets/styles.css" />
     </head>
   );
-  ctx.res.status(200).send(`<!doctype html><html>${head}${body}</html>`);
+  const pre = `<script data-weave="true" type="text/javascript" charset="utf-8">if(!window._$)window._$=${JSON.stringify(props)};</script>`;
+  ctx.res.status(200).send(`<!doctype html><html>${head}${body}${pre}${script}</html>`);
 }
 
 export default async function render(App, ctx) {
