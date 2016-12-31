@@ -2,6 +2,9 @@
 import path from 'path';
 import webpack from 'webpack';
 
+import cssnext from 'postcss-cssnext';
+import precss from 'precss';
+
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import OfflinePlugin from 'offline-plugin';
 
@@ -128,6 +131,9 @@ export default (dir) => ({
       },
     }),
   ],
-  postcss: [],
+  postcss: [
+    cssnext,
+    precss,
+  ],
 });
 
