@@ -1,6 +1,6 @@
 {
   "name": "weave-io",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "A framework for building universal inferno applications",
   "main": "./build/index.js",
   "scripts": {
@@ -74,7 +74,9 @@
     "chokidar": "1.6.1",
     "write-file-webpack-plugin": "3.4.2",
     "precss": "1.4.0",
-    "postcss-cssnext": "2.9.0"
+    "postcss-import": "9.0.0",
+    "postcss-cssnext": "2.9.0",
+    "postcss-reporter": "3.0.0"
   },
   "babel": {
     "presets": ["es2015", "stage-0"],

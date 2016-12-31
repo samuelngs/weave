@@ -2,7 +2,9 @@
 import path from 'path';
 import webpack from 'webpack';
 
+import cssimport from 'postcss-import';
 import cssnext from 'postcss-cssnext';
+import cssreport from 'postcss-reporter';
 import precss from 'precss';
 
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
@@ -132,8 +134,10 @@ export default (dir) => ({
     }),
   ],
   postcss: [
+    cssimport({ addDependencyTo: webpack }),
     cssnext,
     precss,
+    cssreport,
   ],
 });
 
