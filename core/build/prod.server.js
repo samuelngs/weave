@@ -52,7 +52,7 @@ export default (dir) => ({
                   'weave-render': path.join(__dirname, '..', 'render.js'),
                   'weave-context': path.join(__dirname, '..', 'context.js'),
                   'weave-head': path.join(__dirname, '..', 'head.js'),
-                  'application': dir,
+                  'application': path.join(dir, 'index.js'),
                 },
               },
             ],
@@ -69,7 +69,7 @@ export default (dir) => ({
       },
       { test: /\.json$/, loader: 'json-loader' },
       {
-        test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
+        test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|eot|ico)$/,
         loader: 'file',
         query: {
           name: 'assets/[hash].[ext]',

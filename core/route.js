@@ -20,12 +20,20 @@ export class Route extends Component {
     super(props, context);
   }
 
+  render() {
+    return null;
+  }
+
 }
 
 export class IndexRoute extends Component {
 
   constructor(props, context) {
     super(props, context);
+  }
+
+  render() {
+    return null;
   }
 
 }

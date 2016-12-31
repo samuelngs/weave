@@ -56,7 +56,7 @@ async function redux(reducers) {
 }
 
 async function patch(route, store, ctx) {
-  const { type, props: { path, component, children } } = route;
+  const { props: { path, component, children } } = route;
   const args = { component };
   if ( typeof path === 'string' && path.trim().length > 0 ) {
     args.path = strip(path);

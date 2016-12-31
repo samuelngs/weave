@@ -72,8 +72,16 @@ export default (dir, tmp) => ({
       },
       { test: /\.json$/, loader: 'json-loader' },
       {
-        test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
+        test: /\.(png|jpg|jpeg|gif|woff|woff2|eot)$/,
         loader: 'url',
+        query: {
+          name: '[hash].[ext]',
+          limit: 10000,
+        }
+      },
+      {
+        test: /\.(svg|ico)$/,
+        loader: 'file',
         query: {
           name: '[hash].[ext]',
           limit: 10000,
