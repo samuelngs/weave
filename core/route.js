@@ -135,12 +135,12 @@ export class Router extends Component {
 
   renderComponent(components = null, params = defaults.object, props = defaults.array, idx = defaults.number) {
     const { history } = this.props;
-    const { reinit, drawed, ctx: { navigator, location, cookies, headers } } = this.state;
+    const { prerendered, reinit, drawed, ctx: { navigator, location, cookies, headers } } = this.state;
     const component = components[idx];
     if ( !component ) return null;
     const prop = props[idx] || defaults.object;
     const args = { };
-    if ( reinit || (!reinit && !drawed) ) args.initializing = true;
+    if ( prerendered && (reinit || !drawed) ) args.initializing = true;
     const children = this.renderComponent(components, params, props, idx + 1);
     if ( typeof children === 'object' && typeof children !== null ) {
       return createElement(component, { ...prop, ...args, navigator, location, cookies, headers, history, params }, children);
