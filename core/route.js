@@ -140,7 +140,7 @@ export class Router extends Component {
     if ( !component ) return null;
     const prop = props[idx] || defaults.object;
     const args = { };
-    if ( reinit && !drawed ) args.initializing = true;
+    if ( reinit || (!reinit && !drawed) ) args.initializing = true;
     const children = this.renderComponent(components, params, props, idx + 1);
     if ( typeof children === 'object' && typeof children !== null ) {
       return createElement(component, { ...prop, ...args, navigator, location, cookies, headers, history, params }, children);
