@@ -140,7 +140,7 @@ export default async function(App, ctx) {
   const { components, params } = match(children, pathname);
   const props = typeof window === 'undefined'
     ? await Promise.all(components.map(async (component) => await initialize(component, ctx)))
-    : window._$ || defaults.array;
+    : ((Array.isArray(window._$) && window._$.length > 0 ? window._$ : await Promise.all(components.map(async (component) => await initialize(component, ctx)))) || defaults.array);
   const app = <IRouter history={history} components={components} props={props} params={params} ctx={ctx}>
     {children}
   </IRouter>
