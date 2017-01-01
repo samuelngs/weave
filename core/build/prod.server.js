@@ -69,7 +69,7 @@ export default (dir) => ({
       },
       { test: /\.json$/, loader: 'json-loader' },
       {
-        test: /\.(png|jpg|jpeg|gif|svg|woff|woff2|eot|ico)$/,
+        test: /\.(png|jpg|jpeg|gif|svg|ico|ttf|otf|eot|woff|woff2)$/,
         loader: 'file',
         query: {
           name: 'assets/[hash].[ext]',

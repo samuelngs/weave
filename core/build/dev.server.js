@@ -56,6 +56,7 @@ export default (dir, tmp) => ({
                   'react-dom': require.resolve('inferno-compat'),
                   'weave-router': path.join(__dirname, '..', 'router.js'),
                   'weave-head': path.join(__dirname, '..', 'head.js'),
+                  'weave-render': path.join(__dirname, '..', 'render.js'),
                   'application': path.join(dir, 'index.js'),
                 },
               },
@@ -70,9 +71,24 @@ export default (dir, tmp) => ({
           path.join(__dirname, '..', '..', 'node_modules'),
         ],
       },
+      {
+        test: /\.js$|\.jsx$/,
+        loader: path.join(__dirname, '..', 'hot.js'),
+        query: {
+          dir,
+          tmp,
+        },
+        include: [
+          dir,
+        ],
+        exclude: [
+          path.join(dir, 'node_modules'),
+          path.join(__dirname, '..', '..', 'node_modules'),
+        ],
+      },
       { test: /\.json$/, loader: 'json-loader' },
       {
-        test: /\.(png|jpg|jpeg|gif|woff|woff2|eot)$/,
+        test: /\.(png|jpg|jpeg|gif)$/,
         loader: 'url',
         query: {
           name: '[hash].[ext]',
@@ -80,7 +96,7 @@ export default (dir, tmp) => ({
         }
       },
       {
-        test: /\.(svg|ico)$/,
+        test: /\.(ttf|otf|eot|woff|woff2|svg|ico)$/,
         loader: 'file',
         query: {
           name: '[hash].[ext]',

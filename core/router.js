@@ -146,3 +146,7 @@ export default async function(App, ctx) {
   </IRouter>
   return { app, store, props };
 }
+
+if (module.hot) {
+  module.hot.accept();
+}
