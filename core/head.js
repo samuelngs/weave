@@ -40,8 +40,13 @@ export class Head extends Component {
         return this.apply();
       }
       for ( const key of nk ) {
-        if ( nk[key] !== ok[key] ) {
+        if ( typeof np[key] !== typeof op[key] ) {
           return this.apply();
+        }
+        if ( typeof np[key] !== 'object' && typeof op[key] !== 'object' ) {
+          if ( np[key] !== op[key] ) {
+            return this.apply();
+          }
         }
       }
     }

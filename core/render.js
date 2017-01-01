@@ -9,8 +9,6 @@ import offline from './offline';
 
 const script = `<script data-weave="true" type="text/javascript" charset="utf-8" src="/assets/client.js"></script>`;
 
-let _ = null;
-
 export async function unmount() {
   Inferno.render(null, document.body.childNodes[0]);
 }
@@ -18,8 +16,7 @@ export async function unmount() {
 export async function mount(App) {
   const state = await context();
   const { app, store } = await router(App, state);
-  if ( !_ ) _ = store;
-  Inferno.render(<Provider store={ _ }>{ app }</Provider>, document.body.childNodes[0]);
+  Inferno.render(<Provider store={ store }>{ app }</Provider>, document.body.childNodes[0]);
   setImmediate(offline);
 }
 

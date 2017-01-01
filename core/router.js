@@ -25,15 +25,25 @@ const config = {
   keyPrefix: 'weave:',
 };
 
+let _history = null;
+let _store = null;
+
 function isBrowser() {
   return typeof window !== 'undefined';
 }
 
 function createHistory(props = { }) {
-  return isBrowser() ? createBrowserHistory(props) : createMemoryHistory(props);
+  if (isBrowser()) {
+    if (!_history) _history = createBrowserHistory(props);
+    return _history;
+  }
+  return createMemoryHistory(props);
 }
 
 async function redux(reducers) {
+  if (isBrowser() && _store) {
+    return _store;
+  }
   const reducer = combineReducers(
     typeof reducers === 'object' && reducers != null
     ? { ...reducers, ...internalReducers }
@@ -52,6 +62,10 @@ async function redux(reducers) {
     persistStore(store, config);
   }
   await getStoredState(config);
+  if (isBrowser()) {
+    _store = store;
+    return _store;
+  }
   return store;
 }
 
