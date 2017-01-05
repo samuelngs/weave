@@ -1,0 +1,12 @@
+{
+  "name": "with-images",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "weave",
+    "build": "weave build"
+  },
+  "dependencies": {
+    "weave-io": "*"
+  },
+  "license": "ISC"
+}
