@@ -96,7 +96,7 @@ export default (dir, tmp) => ({
         }
       },
       {
-        test: /\.(ttf|otf|eot|woff|woff2|svg|ico)$/,
+        test: /\.(ttf|otf|eot|woff|woff2|svg|ico|webm|mp4)$/,
         loader: 'file',
         query: {
           name: '[hash].[ext]',
