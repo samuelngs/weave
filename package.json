@@ -1,6 +1,6 @@
 {
   "name": "weave-io",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "description": "A framework for building universal inferno applications",
   "main": "./build/index.js",
   "scripts": {
@@ -27,12 +27,12 @@
     "offline-first"
   ],
   "dependencies": {
-    "inferno": "1.0.7",
-    "inferno-server": "1.0.7",
-    "inferno-compat": "1.0.7",
-    "inferno-component": "1.0.7",
-    "inferno-create-element": "1.0.7",
-    "inferno-redux": "1.0.7",
+    "inferno": "1.1.2",
+    "inferno-server": "1.1.2",
+    "inferno-compat": "1.1.2",
+    "inferno-component": "1.1.2",
+    "inferno-create-element": "1.1.2",
+    "inferno-redux": "1.1.2",
     "redux": "^3.6.0",
     "redux-persist": "4.0.0-alpha7",
     "redux-thunk": "^2.1.0",
@@ -48,7 +48,7 @@
     "babel-loader": "^6.2.7",
     "babel-generator": "6.17.0",
     "babel-cli": "^6.18.0",
-    "babel-plugin-inferno": "1.4.0",
+    "babel-plugin-inferno": "1.5.0",
     "babel-plugin-syntax-jsx": "^6.18.0",
     "babel-plugin-syntax-object-rest-spread": "^6.13.0",
     "babel-plugin-transform-async-to-generator": "6.16.0",

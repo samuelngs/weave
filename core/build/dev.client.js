@@ -92,7 +92,7 @@ export default (dir, tmp) => ({
       },
       { test: /\.json$/, loader: 'json-loader' },
       {
-        test: /\.(png|jpg|jpeg|gif)$/,
+        test: /\.(png|jpg|jpeg|gif|webp)$/,
         loader: 'url',
         query: {
           name: '[hash].[ext]',
@@ -100,7 +100,7 @@ export default (dir, tmp) => ({
         }
       },
       {
-        test: /\.(ttf|otf|eot|woff|woff2|svg|ico|webm|mp4)$/,
+        test: /\.(ttf|otf|eot|woff|woff2|svg|ico|webm|mp4|ogg)$/,
         loader: 'file',
         query: {
           name: '[hash].[ext]',
