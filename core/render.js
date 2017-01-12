@@ -15,9 +15,9 @@ export async function unmount() {
 
 export async function mount(App) {
   const state = await context();
-  const { app, store } = await router(App, state);
+  const { app, store, offline: progressive } = await router(App, state);
   Inferno.render(<Provider store={ store }>{ app }</Provider>, document.body.childNodes[0]);
-  if ( ['localhost', '127.0.0.1'].indexOf(location.hostname) === -1 ) {
+  if ( ['localhost', '127.0.0.1'].indexOf(location.hostname) === -1 && progressive ) {
     setImmediate(offline);
   }
 }

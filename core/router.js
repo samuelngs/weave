@@ -19,6 +19,7 @@ const defaults = {
   string: '',
   object: {},
   array : [],
+  bool  : false,
 };
 
 const config = {
@@ -144,6 +145,7 @@ export function Link(props, context) {
 
 export default async function(App, ctx) {
   const { location: { pathname } } = ctx;
+  const offline = root.props && root.props.offline || defaults.bool;
   const root = new App(ctx);
   const store = await redux(root.props && root.props.reducers);
   const children = await routes(root, store, ctx);
@@ -158,7 +160,7 @@ export default async function(App, ctx) {
   const app = <IRouter history={history} components={components} props={props} params={params} ctx={ctx}>
     {children}
   </IRouter>
-  return { app, store, props };
+  return { app, store, props, offline };
 }
 
 if (module.hot) {

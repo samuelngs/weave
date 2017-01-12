@@ -119,6 +119,14 @@ const view = () => <div className={styles.something}>
 </div>
 ```
 
+#### Progressive web app
+
+```
+export default () => <Router offline={true}>
+  ...
+</Router>
+```
+
 ## Development
 ```
 $ npm run dev
