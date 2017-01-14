@@ -127,6 +127,14 @@ export default () => <Router offline={true}>
 </Router>
 ```
 
+#### Google analytics
+
+```
+export default () => <Router ga="UA-XXXXXXXX-X">
+  ...
+</Router>
+```
+
 ## Development
 ```
 $ npm run dev
