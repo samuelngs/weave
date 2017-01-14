@@ -147,6 +147,7 @@ export default async function(App, ctx) {
   const { location: { pathname } } = ctx;
   const root = new App(ctx);
   const offline = root.props && root.props.offline || defaults.bool;
+  const ga = root.props && root.props.ga || defaults.string;
   const store = await redux(root.props && root.props.reducers);
   const children = await routes(root, store, ctx);
   const history = createHistory({
@@ -160,7 +161,7 @@ export default async function(App, ctx) {
   const app = <IRouter history={history} components={components} props={props} params={params} ctx={ctx}>
     {children}
   </IRouter>
-  return { app, store, props, offline };
+  return { app, store, props, offline, ga };
 }
 
 if (module.hot) {
