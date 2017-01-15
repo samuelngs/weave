@@ -3,7 +3,7 @@ A framework for building universal inferno applications
 
 ## Feature
 
-* Inferno 1.1.2
+* Inferno 1.2.0
 * Express 4
 * Universal rendering (Server-side and Browser)
 * Offline-first
