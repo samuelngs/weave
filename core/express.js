@@ -12,7 +12,7 @@ import context from './context';
 export default function server(App, dir = process.cwd()) {
 
   const app = express();
-  const port = 5000;
+  const port = process.env.NODE_ENV === 'production' && process.env.PORT || 5000;
 
   let router = App;
   let update = replace => router = replace;
