@@ -146,6 +146,8 @@ export function Link(props, context) {
 export default async function(App, ctx) {
   const { location: { pathname } } = ctx;
   const root = new App(ctx);
+  const robots = root.props && root.props.robots || defaults.bool;
+  const sitemap = root.props && root.props.sitemap || defaults.bool;
   const offline = root.props && root.props.offline || defaults.bool;
   const ga = root.props && root.props.ga || defaults.string;
   const store = await redux(root.props && root.props.reducers);
@@ -161,7 +163,7 @@ export default async function(App, ctx) {
   const app = <IRouter history={history} components={components} props={props} params={params} ctx={ctx}>
     {children}
   </IRouter>
-  return { app, store, props, offline, ga };
+  return { app, store, props, offline, ga, robots, sitemap };
 }
 
 if (module.hot) {

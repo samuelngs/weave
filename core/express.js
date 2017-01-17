@@ -20,7 +20,31 @@ export default function server(App, dir = process.cwd()) {
   app.use(compression());
   app.use(cookies());
 
-  app.use('/favicon.ico', (req, res) => res.status(404).end());
+  app.get('/favicon.ico', (req, res) => res.status(404).end());
+
+  app.get('/robots.txt', async (req, res) => {
+    const ctx = await context(req, res);
+    const { props: { robots } } = new router(ctx);
+    if ( !robots ) {
+      return res.status(404).end();
+    }
+    if ( typeof robots === 'function' ) {
+      return res.status(200).send(robots(ctx));
+    }
+    return res.status(200).send(robots);
+  });
+
+  app.get('/sitemap.xml', async (req, res) => {
+    const ctx = await context(req, res);
+    const { props: { sitemap } } = new router(ctx);
+    if ( !sitemap ) {
+      return res.status(404).end();
+    }
+    if ( typeof sitemap === 'function' ) {
+      return res.set('Content-Type', 'application/xml').status(200).send(sitemap(ctx));
+    }
+    return res.set('Content-Type', 'application/xml').status(200).send(sitemap);
+  });
 
   app.use('/ctx', (req, res) => res.json(req.headers));
 

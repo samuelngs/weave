@@ -135,6 +135,22 @@ export default () => <Router ga="UA-XXXXXXXX-X">
 </Router>
 ```
 
+#### `sitemap.xml` and `robots.txt`
+
+```
+function robots (ctx) {
+  return '';
+}
+
+function sitemap (ctx) {
+  return '';
+}
+
+export default () => <Router robots={robots} sitemap={sitemap}>
+  ...
+</Router>
+```
+
 ## Development
 ```
 $ npm run dev
