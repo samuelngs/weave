@@ -3,7 +3,7 @@ A framework for building universal inferno applications
 
 ## Feature
 
-* Inferno 1.2.0
+* Inferno 1.2.1
 * Express 4
 * Universal rendering (Server-side and Browser)
 * Offline-first
@@ -123,14 +123,6 @@ const view = () => <div className={styles.something}>
 
 ```
 export default () => <Router offline={true}>
-  ...
-</Router>
-```
-
-#### Google analytics
-
-```
-export default () => <Router ga="UA-XXXXXXXX-X">
   ...
 </Router>
 ```
