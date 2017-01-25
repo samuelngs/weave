@@ -27,6 +27,7 @@ export default (dir) => ({
   target: 'web',
   context: path.join(__dirname, '..'),
   entry: [
+    'babel-polyfill',
     './client.js',
   ],
   devtool: 'cheap-module-source-map',
